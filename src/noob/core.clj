@@ -21,31 +21,31 @@
 products
 ; => [{:name "Tenis", :price 199.99} {:name "Celular", :price 299.99}]
 
-(defn increase_ship [{:keys [name price]}]
+(defn increase_shipping [{:keys [name price]}]
   {:name name :price (+ price 19)})
 
-(map increase_ship products)
+(map increase_shipping products)
 ; => ({:name "Tenis", :price 218.99} {:name "Celular", :price 318.99})
 
-(def PROMOTION_FREE_SHIP 248.00)
+(def PROMOTION_FREE_SHIPPING 248.00)
 
-PROMOTION_FREE_SHIP
+PROMOTION_FREE_SHIPPING
 ; => 248.0
 
-(defn free_ship [{:keys [price name] :as product}]
-  (if (> price PROMOTION_FREE_SHIP)
+(defn free_shipping [{:keys [price name] :as product}]
+  (if (> price PROMOTION_FREE_SHIPPING)
     {:name name :price (- price 19)}
     product))
 
-(map free_ship products)
+(map free_shipping products)
 ; => (false true)
 
-(defn increase_ship_with_promo [{:keys [name price]}]
-  (if (> price PROMOTION_FREE_SHIP)
+(defn increase_shipping_with_promo [{:keys [name price]}]
+  (if (> price PROMOTION_FREE_SHIPPING)
     (do {:name name :price price})
     (do {:name name :price (+ price 19)})))
 
-(map increase_ship_with_promo products)
+(map increase_shipping_with_promo products)
 ; => ({:name "Tenis", :price 218.99} {:name "Celular", :price 299.99})
 
 ; "or" na maioria dos casos é mais eficiente do que "and"
@@ -61,10 +61,10 @@ PROMOTION_FREE_SHIP
 products
 ; => [{:name "Tenis", :price 199.99} {:name "Celular", :price 299.99}]
 
-(get { :name 2 } :name)
+(get {:name 2} :name)
 ; 2
 
-(defn get_ [product] 
+(defn get_ [product]
   (get product :name))
 
 (map get_ products)
@@ -107,3 +107,27 @@ points
 
 (vec (list :banana :apple :rice :tomato))
 ; => [:banana :apple :rice :tomato]
+
+; clojure reconhece dois tipos de estruturas: representações literais ( numeros,
+;  strings, vetores ...) e operações.
+
+5
+; => 5
+
+["a" "vector" "of" "strings"]
+; => ["a" "vector" "of" "strings"]
+
+(+)
+; => 0
+
+products
+; => [{:name "Tenis", :price 199.99} {:name "Celular", :price 299.99}]
+
+(defn shipping_charge [{:keys [name price]}]
+  (when (< price PROMOTION_FREE_SHIPPING)
+    {:item (str "Item: " name ) :promotion false :price 19 :comparative (/ 19 price)}
+  ))
+
+(map shipping_charge products)
+; => ({:item "Item: Tenis", :promotion false, :price 19, :comparative 0.09500475023751187} nil)
+
