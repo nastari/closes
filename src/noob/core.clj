@@ -184,10 +184,10 @@ products
     "Ok!"
     ))
 
-(feedback_user {:message "Could be better" :stars 3 :complain "DENUNCIA!"})
+(feedback_user {:message "Could be better" :stars 3 :complain "ALERT!"})
 ; => Ok!
 
-(feedback_user {:message "Could be better" :stars 1 :complain "DENUNCIA!"})
+(feedback_user {:message "Could be better" :stars -1 :complain "ALERT!"})
 ; => "Sorry, maximum stars: 5. Maximum length message: 255"
 
 ; { :message "Cool!" :stars 5 :complain nil }
