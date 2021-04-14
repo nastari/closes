@@ -150,15 +150,15 @@ products
 (risk :caution)
 ; => "O risco é: possivelmente alto!"
 
-(get { :a 0 :b 1 :c { :aa 11 :bb 22 }} :c)
+(get {:a 0 :b 1 :c {:aa 11 :bb 22}} :c)
 ; => {:aa 11, :bb 22}
 
-(get-in { :a 0 :b 1 :c { :aa 11 :bb 22 }} [:c :aa])
+(get-in {:a 0 :b 1 :c {:aa 11 :bb 22}} [:c :aa])
 ; 11
 
-(get-in { :a 0 :b 1 :c { :aa { :aaa 111 } :bb 22 }} [:c :aa :aaa])
+(get-in {:a 0 :b 1 :c {:aa {:aaa 111} :bb 22}} [:c :aa :aaa])
 ; 111
-(get-in { :a 0 :b 1 :c { :aa { :aaa 111 } :bb 22 }} [:c :aa :aab] "Sem retorno;")
+(get-in {:a 0 :b 1 :c {:aa {:aaa 111} :bb 22}} [:c :aa :aab] "Sem retorno;")
 ; => "Sem retorno;"
 
 ; Pesquisar valor no mapa; mapa como função; chave como argumento;
@@ -166,23 +166,22 @@ products
 ({true 1 false 0} true)
 ; => 1
 
-({ true 1 false 0} false)
+({true 1 false 0} false)
 ; => 0
 
 ; ( :chaves -> procurando valor em uma estrutura )
 
-(:false { :true 1 :false 0}) ; = (get { :true 1 :false 0} :false)
+(:false {:true 1 :false 0}) ; = (get { :true 1 :false 0} :false)
 ; => 0
 
-(:falsiy { :true 1 :false 0} "Nop") 
+(:falsiy {:true 1 :false 0} "Nop")
 ; => "Nop"
 
 ; { :message "Cool!" :stars 5 :complain nil }
-(defn feedback_user [{:keys [message stars] :as fb }]
+(defn feedback_user [{:keys [message stars] :as fb}]
   (if (or (> stars 5) (< stars 1) (> (count message) 255))
     "Sorry, maximum stars: 5. Maximum length message: 255"
-    "Ok!"
-    ))
+    "Ok!"))
 
 (feedback_user {:message "Could be better" :stars 3 :complain "ALERT!"})
 ; => Ok!
@@ -191,18 +190,15 @@ products
 ; => "Sorry, maximum stars: 5. Maximum length message: 255"
 
 ; { :message "Cool!" :stars 5 :complain nil }
-(defn feedback_user [{:keys [message stars] :as fb }]
+(defn feedback_user [{:keys [message stars] :as fb}]
   (if (or (> stars 5) (< stars 1) (> (count message) 255))
     "Sorry, maximum stars: 5. Maximum length message: 255"
     (do
       (println "Cool")
       (let [complain (:complain fb)]
-        (if complain 
-            {:msg message :score stars :report complain}
-            {:msg message :score stars })    
-        )
-      )
-    ))
+        (if complain
+          {:msg message :score stars :report complain}
+          {:msg message :score stars})))))
 
 (feedback_user {:message "Could be better" :stars -1 :complain "ALERT!"})
 ; => "Sorry, maximum stars: 5. Maximum length message: 255"
@@ -210,5 +206,38 @@ products
 (feedback_user {:message "Could be better" :stars 2 :complain "ALERT!"})
 ; => {:msg "Could be better", :score 2, :report "ALERT!"}
 
-(feedback_user {:message "Could be better" :stars 2 })
+(feedback_user {:message "Could be better" :stars 2})
 ; => {:msg "Could be better", :score 2}
+
+(def notas [7 8 6 10 9])
+
+notas
+; => [7 8 6 10 9]
+
+; recuperar elementos no vetor ~notas[2]
+
+(get notas 2)
+; 6
+
+(conj notas 3)
+; => [7 8 6 10 9 3] ;acrescenta no final do vetor.
+
+(def notas_list '(7 8 6 10 9))
+
+notas_list
+; => (7 8 6 10 9)
+
+(conj notas_list 3)
+; => (3 7 8 6 10 9) ;acrescenta no início da lista.
+
+; recuperar elementos na lista ~notas_list[2]
+
+(nth notas_list 0)
+; 7
+
+(nth notas_list 1)
+; 8
+
+;desempenho ;"nth" percorre toda lista até indíce de interesse. "get" em vetores salta direto.
+
+
