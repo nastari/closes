@@ -127,11 +127,44 @@ products
 
 (defn shipping_charge [{:keys [name price]}]
   (when (< price PROMOTION_FREE_SHIPPING)
-    {:item (str "Item: " name ) :promotion false :price 19 :comparative (/ 19 price)}
-  ))
+    {:item (str "Item: " name) :promotion false :price 19 :comparative (/ 19 price)}))
 
 (map shipping_charge products)
 ; => ({:item "Item: Tenis", :promotion false, :price 19, :comparative 0.09500475023751187} nil)
 
+(defn risk [severity]
+  (str "O risco é: "
+       (if (or (= severity :mild) (= severity :easy))
+         "leve"
+         "possivelmente alto!")))
+
+(risk :warning)
+; => "O risco é: possivelmente alto!"
+
+(risk :easy)
+; => "O risco é: leve"
+
+(risk :mild)
+; => "O risco é: leve"
+
+(risk :caution)
+; => "O risco é: possivelmente alto!"
+
+(get { :a 0 :b 1 :c { :aa 11 :bb 22 }} :c)
+; => {:aa 11, :bb 22}
+
+(get-in { :a 0 :b 1 :c { :aa 11 :bb 22 }} [:c :aa])
+; 11
+
+(get-in { :a 0 :b 1 :c { :aa { :aaa 111 } :bb 22 }} [:c :aa :aaa])
+; 111
+(get-in { :a 0 :b 1 :c { :aa { :aaa 111 } :bb 22 }} [:c :aa :aab] "Sem retorno;")
+; => "Sem retorno;"
+
+({ true 1 false 0} true)
+; => 1
+
+({ true 1 false 0} false)
+; => 0
 
 
