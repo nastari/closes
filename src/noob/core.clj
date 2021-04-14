@@ -48,15 +48,17 @@ PROMOTION_FREE_SHIPPING
 (map increase_shipping_with_promo products)
 ; => ({:name "Tenis", :price 218.99} {:name "Celular", :price 299.99})
 
-; "or" na maioria dos casos é mais eficiente do que "and"
-; pois quando encontra a primeira instância verdadeira não necessita verificar
-; o restante dos operandos, diferente do "and" que precisa até o 'final'.
-
 (or 5 2)
 ; 5
 
 (or 5 false)
 ; 5
+
+(and false true)
+; false
+
+(or false true)
+; true
 
 products
 ; => [{:name "Tenis", :price 199.99} {:name "Celular", :price 299.99}]
@@ -130,4 +132,6 @@ products
 
 (map shipping_charge products)
 ; => ({:item "Item: Tenis", :promotion false, :price 19, :comparative 0.09500475023751187} nil)
+
+
 
