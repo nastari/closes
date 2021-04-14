@@ -161,10 +161,54 @@ products
 (get-in { :a 0 :b 1 :c { :aa { :aaa 111 } :bb 22 }} [:c :aa :aab] "Sem retorno;")
 ; => "Sem retorno;"
 
-({ true 1 false 0} true)
+; Pesquisar valor no mapa; mapa como função; chave como argumento;
+
+({true 1 false 0} true)
 ; => 1
 
 ({ true 1 false 0} false)
 ; => 0
 
+; ( :chaves -> procurando valor em uma estrutura )
 
+(:false { :true 1 :false 0}) ; = (get { :true 1 :false 0} :false)
+; => 0
+
+(:falsiy { :true 1 :false 0} "Nop") 
+; => "Nop"
+
+; { :message "Cool!" :stars 5 :complain nil }
+(defn feedback_user [{:keys [message stars] :as fb }]
+  (if (or (> stars 5) (< stars 1) (> (count message) 255))
+    "Sorry, maximum stars: 5. Maximum length message: 255"
+    "Ok!"
+    ))
+
+(feedback_user {:message "Could be better" :stars 3 :complain "DENUNCIA!"})
+; => Ok!
+
+(feedback_user {:message "Could be better" :stars 1 :complain "DENUNCIA!"})
+; => "Sorry, maximum stars: 5. Maximum length message: 255"
+
+; { :message "Cool!" :stars 5 :complain nil }
+(defn feedback_user [{:keys [message stars] :as fb }]
+  (if (or (> stars 5) (< stars 1) (> (count message) 255))
+    "Sorry, maximum stars: 5. Maximum length message: 255"
+    (do
+      (println "Cool")
+      (let [complain (:complain fb)]
+        (if complain 
+            {:msg message :score stars :report complain}
+            {:msg message :score stars })    
+        )
+      )
+    ))
+
+(feedback_user {:message "Could be better" :stars -1 :complain "ALERT!"})
+; => "Sorry, maximum stars: 5. Maximum length message: 255"
+
+(feedback_user {:message "Could be better" :stars 2 :complain "ALERT!"})
+; => {:msg "Could be better", :score 2, :report "ALERT!"}
+
+(feedback_user {:message "Could be better" :stars 2 })
+; => {:msg "Could be better", :score 2}
