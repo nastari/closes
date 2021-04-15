@@ -240,4 +240,158 @@ notas_list
 
 ;desempenho ;"nth" percorre toda lista até indíce de interesse. "get" em vetores salta direto.
 
+(read-string "(+ 1 2)")
+;; => (+ 1 2)
 
+(first (read-string "(+ 1 2)"))
+;; => +
+
+(get-in {:a 1 :b 10 :c {100 :d}} [:c 100])
+;; => :d
+
+;; keywords can be used as functions that look up the corresponding value in data structure.
+(:a {:a 100 :b 101 :c 102})
+;; => 100
+
+(get [0 1 2] 0)
+;; => 0
+
+(get ["as" 1 2] 0)
+;; => "as"
+
+(vector "a" 20 {:b :c})
+;; => ["a" 20 {:b :c}]
+
+;; Sets; coleção de valores únicos;
+#{1 2 2}
+;; Syntax error reading source at (noob/src/noob/core.clj:2:9).
+;; Duplicate key: 2
+
+#{12 24}
+;; => #{24 12}
+
+(def exams [9 2 3 2])
+;; => #'noob.core/exams
+
+(set exams)
+;; => #{3 2 9}
+
+(contains? (set exams) 1)
+;; => false
+;; contains? para sets procura pelo elemento.
+
+(contains? exams 4)
+;; => false 
+;; contains? para vetor procura pelo indice.
+
+(contains? exams 3)
+;; true
+
+(hash-set 55 55 33 44 11 3 3 3 3)
+;; => #{55 33 44 3 11} 
+;; retorna valores únicos
+
+(:a #{:a :b})
+;; => :a
+
+(:c #{:a :b})
+;; => nil
+
+(get #{:a :B} :B)
+;; :B
+
+;; Verificar o valor existe dentro do Set
+
+(def conjuntos #{5 3 2 9 1})
+
+(get conjuntos 11)
+;; => nil
+
+(get conjuntos 9)
+;; => 9
+
+(> 5 2 1 0 -1)
+;; => true
+
+(defn biggerThanFive [n]
+  (if (> n 5)
+    (println (str "5: Eu sou maior: " n))
+    (println (str "5: Eu sou menor ou igual: " n))))
+;; => #'noob.core/biggerThanFive
+
+(def ar [5 9 3 8 1 2 11 3 4 99])
+;; => #'noob.core/ar
+
+(defn arrayBiggerThanFive [arr_]
+  (map biggerThanFive arr_))
+;; => #'noob.core/arrayBiggerThanFive
+
+(arrayBiggerThanFive ar)
+;; 5: Eu sou menor ou igual: 5
+;; 5: Eu sou maior: 9
+;; 5: Eu sou menor ou igual: 3
+;; 5: Eu sou maior: 8
+;; 5: Eu sou menor ou igual: 1
+;; 5: Eu sou menor ou igual: 2
+;; 5: Eu sou maior: 11
+;; 5: Eu sou menor ou igual: 3
+;; 5: Eu sou menor ou igual: 4
+;; 5: Eu sou maior: 99
+;; => (nil nil nil nil nil nil nil nil nil nil)
+
+(clojure.string/join ", " ["a" "b" "c"])
+;; => "a, b, c"
+
+
+(clojure.string/join " -> " ["Brazil" "Rio de Janeiro" "Volta Redonda"])
+;; => "Brazil -> Rio de Janeiro -> Volta Redonda"
+
+(defn things [one & rest] rest )
+
+(things 2 3 "a" { :foo "bar"})
+;; => (3 "a" { :foo "bar"})
+
+(defn my-first [[first]] first )
+
+(my-first ["primeiro-elemento" 2])
+;; => "primeiro-elemento"
+
+(defn my-first [[first] & rest] { :first first :rest rest })
+
+(my-first ["primeiro-elemento" 2] "a" 123)
+;; => {:first "primeiro-elemento", :rest ("a" 123)}
+;; o arg rest 'vira' uma lista
+
+(map (fn [x] x) [23 4 2])
+;; => (23 4 2)
+
+(map (fn [x] x) '(99 100 101))
+;; => (99 100 101)
+
+(map (fn [x] x) #{99 343})
+;; => (343 99)
+
+(map (fn [x] x) {99 343})
+;; => ([99 343])
+
+(fn [x y] { :x x :y y})
+;; => #function[noob.core/eval11225/fn--11226]
+
+;; lembra do (operator operand1 operand2) então:
+
+((fn [x y & rest] (println rest) {:x x :y y}) 50 2)
+;; => {:x 50, :y 2}
+
+#(* %1 %2)
+;; => #function[noob.core/eval11368/fn--11369]
+
+(#(* %1 %2) 20 2)
+;; => 40
+
+(map #(- % 2) [5 2])
+;; => (3 0)
+
+
+(map #(- %1 %2) [250 22] [240 21])
+;; funcionamento interessante 250-240; 22 -21; ...;
+;; => (10 1)
