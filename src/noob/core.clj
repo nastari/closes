@@ -395,3 +395,169 @@ notas_list
 (map #(- %1 %2) [250 22] [240 21])
 ;; funcionamento interessante 250-240; 22 -21; ...;
 ;; => (10 1)
+
+(#(* 2 %) 2)
+;; 4
+
+(defn bigger-than-maker
+  [num]
+  #(> % num))
+
+(def big-than-5 (bigger-than-maker 5))
+
+(big-than-5 2)
+;; => false
+
+(big-than-5 19)
+;; => true
+
+(def asym-hobbit-body-parts [{:name "head" :size 3}
+                             {:name "left-eye" :size 1}
+                             {:name "left-ear" :size 1}
+                             {:name "mouth" :size 1}
+                             {:name "nose" :size 1}
+                             {:name "neck" :size 2}
+                             {:name "left-shoulder" :size 3}
+                             {:name "left-upper-arm" :size 3}
+                             {:name "chest" :size 10}
+                             {:name "back" :size 10}
+                             {:name "left-forearm" :size 3}
+                             {:name "abdomen" :size 6}
+                             {:name "left-kidney" :size 1}
+                             {:name "left-hand" :size 2}
+                             {:name "left-knee" :size 2}
+                             {:name "left-thigh" :size 4}
+                             {:name "left-lower-leg" :size 3}
+                             {:name "left-achilles" :size 1}
+                             {:name "left-foot" :size 2}])
+;; => #'noob.core/asym-hobbit-body-parts
+
+(defn matching-part
+  [part]
+  {:name (clojure.string/replace (:name part) #"^left-" "right-")
+   :size (:size part)})
+
+(matching-part {:name "left-ear" :size 1})
+;; => {:name "right-ear", :size 1}
+
+(defn symmetrize-body-parts
+  "Expects a seq of maps that have a :name and :size"
+  
+  [asym-body-parts]
+  
+  (loop [remaining-asym-parts asym-body-parts final-body-parts []]
+    
+    (if (empty? remaining-asym-parts)
+    
+      final-body-parts
+    
+      (let [[part & remaining] remaining-asym-parts]
+      
+        (recur remaining
+              
+               (into final-body-parts
+               
+                     (set [part (matching-part part)])))))))
+
+(symmetrize-body-parts asym-hobbit-body-parts)
+; => [{:name "head", :size 3}
+      ;; {:name "left-eye", :size 1}
+      ;; {:name "right-eye", :size 1}
+      ;; {:name "left-ear", :size 1}
+      ;; {:name "right-ear", :size 1}
+      ;; {:name "mouth", :size 1}
+      ;; {:name "nose", :size 1}
+      ;; {:name "neck", :size 2}
+      ;; {:name "left-shoulder", :size 3}
+      ;; {:name "right-shoulder", :size 3}
+      ;; {:name "left-upper-arm", :size 3}
+      ;; {:name "right-upper-arm", :size 3}
+      ;; {:name "chest", :size 10}
+      ;; {:name "back", :size 10}
+      ;; {:name "left-forearm", :size 3}
+      ;; {:name "right-forearm", :size 3}
+      ;; {:name "abdomen", :size 6}
+      ;; {:name "left-kidney", :size 1}
+      ;; {:name "right-kidney", :size 1}
+      ;; {:name "left-hand", :size 2}
+      ;; {:name "right-hand", :size 2}
+      ;; {:name "left-knee", :size 2}
+      ;; {:name "right-knee", :size 2}
+      ;; {:name "left-thigh", :size 4}
+      ;; {:name "right-thigh", :size 4}
+      ;; {:name "left-lower-leg", :size 3}
+      ;; {:name "right-lower-leg", :size 3}
+      ;; {:name "left-achilles", :size 1}
+      ;; {:name "right-achilles", :size 1}
+      ;; {:name "left-foot", :size 2}
+      ;; {:name "right-foot", :size 2}]
+
+(let [x 3] 
+  (println x)
+  (+ x 1))
+;; 4
+
+(def dogs ["Ace" "Bob" "Doug"])
+
+(let [[first & rest] dogs]
+  {
+   :firstDog first
+   :restDog rest
+  })
+;; => {:firstDog "Ace", :restDog ("Bob" "Doug")}
+
+(into [:a :b] #{ :c :d})
+;; => [:a :b :c :d]
+
+(into [:a :b] #{ :e :a :b })
+;; => [:a :b :e :b :a]
+
+(loop [i 0]
+  (println i)
+  (if (> i 3)
+    (println "bye")
+    (recur (inc i))))
+;; 0
+;; 1
+;; 2
+;; 3
+;; 4
+;; bye
+;; => nil
+
+(defn recursive-printer
+  ([] (recursive-printer 0))
+  ([iteration]
+   (println iteration)
+   (if (> iteration 2)
+     (println "GoodBye!")
+     (recursive-printer (inc iteration)))))
+;; => #'noob.core/recursive-printer
+
+(recursive-printer)
+;; 0
+;; 1
+;; 2
+;; 3
+;; GoodBye!
+;; => nil
+
+;; #"regular-expression"
+
+(re-find #"^coca" "coca-cola")
+;; => coca
+
+(re-find #"^coca" "acoca-cola")
+;; => nil
+
+(clojure.string/replace "coca-cola" #"^coca" "free")
+;; => free-cola
+
+(def strings ["_coca-lola" "-free" "-pepsi-cola" ])
+
+(defn fixed-string [str_]
+  (clojure.string/replace str_ #"^-" "_")
+  )
+
+(map fixed-string strings)
+;; => ("_coca-lola" "_free" "_pepsi-cola")
