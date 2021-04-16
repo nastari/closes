@@ -561,3 +561,42 @@ notas_list
 
 (map fixed-string strings)
 ;; => ("_coca-lola" "_free" "_pepsi-cola")
+
+(defn fixed-string [str_]
+  {:name (clojure.string/replace str_ #"^-" "_")}
+  )
+
+(map fixed-string strings)
+;; => ({:name "_coca-lola"} {:name "_free"} {:name "_pepsi-cola"})
+
+(reduce - [5 4 2 1]) ;iterate
+;; => -2
+
+(- 5 4 2 1)
+;; => -2
+
+(reduce + 15 [1 1 1])
+;; => 18
+
+(reduce - 1 [ 1 1 1 ]) ; = (- (- 1 1) 1)
+;; => -1
+
+(reduce - 1 [ 1 1 1 ]) ; = (- (- (- 1 1) 1) 1)
+;; => -2
+
+(empty? [ 1 2 ])
+;; => false
+
+(defn mapset [f l]
+  (let [l_ (set l)]
+    (map f l_))
+  )
+
+(mapset inc [2 3 2])
+;; => (4 3)
+
+(mapset #(+ % 10) [2 3 2])
+;; => (13 12)
+
+(mapset #(* % 10) [2 3 2])
+;; => (30 20)
