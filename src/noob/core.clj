@@ -346,17 +346,17 @@ notas_list
 (clojure.string/join " -> " ["Brazil" "Rio de Janeiro" "Volta Redonda"])
 ;; => "Brazil -> Rio de Janeiro -> Volta Redonda"
 
-(defn things [one & rest] rest )
+(defn things [one & rest] rest)
 
-(things 2 3 "a" { :foo "bar"})
+(things 2 3 "a" {:foo "bar"})
 ;; => (3 "a" { :foo "bar"})
 
-(defn my-first [[first]] first )
+(defn my-first [[first]] first)
 
 (my-first ["primeiro-elemento" 2])
 ;; => "primeiro-elemento"
 
-(defn my-first [[first] & rest] { :first first :rest rest })
+(defn my-first [[first] & rest] {:first first :rest rest})
 
 (my-first ["primeiro-elemento" 2] "a" 123)
 ;; => {:first "primeiro-elemento", :rest ("a" 123)}
@@ -374,7 +374,7 @@ notas_list
 (map (fn [x] x) {99 343})
 ;; => ([99 343])
 
-(fn [x y] { :x x :y y})
+(fn [x y] {:x x :y y})
 ;; => #function[noob.core/eval11225/fn--11226]
 
 ;; lembra do (operator operand1 operand2) então:
@@ -442,21 +442,21 @@ notas_list
 
 (defn symmetrize-body-parts
   "Expects a seq of maps that have a :name and :size"
-  
+
   [asym-body-parts]
-  
+
   (loop [remaining-asym-parts asym-body-parts final-body-parts []]
-    
+
     (if (empty? remaining-asym-parts)
-    
+
       final-body-parts
-    
+
       (let [[part & remaining] remaining-asym-parts]
-      
+
         (recur remaining
-              
+
                (into final-body-parts
-               
+
                      (set [part (matching-part part)])))))))
 
 (symmetrize-body-parts asym-hobbit-body-parts)
@@ -492,7 +492,7 @@ notas_list
       ;; {:name "left-foot", :size 2}
       ;; {:name "right-foot", :size 2}]
 
-(let [x 3] 
+(let [x 3]
   (println x)
   (+ x 1))
 ;; 4
@@ -500,16 +500,14 @@ notas_list
 (def dogs ["Ace" "Bob" "Doug"])
 
 (let [[first & rest] dogs]
-  {
-   :firstDog first
-   :restDog rest
-  })
+  {:firstDog first
+   :restDog rest})
 ;; => {:firstDog "Ace", :restDog ("Bob" "Doug")}
 
-(into [:a :b] #{ :c :d})
+(into [:a :b] #{:c :d})
 ;; => [:a :b :c :d]
 
-(into [:a :b] #{ :e :a :b })
+(into [:a :b] #{:e :a :b})
 ;; => [:a :b :e :b :a]
 
 (loop [i 0]
@@ -553,18 +551,16 @@ notas_list
 (clojure.string/replace "coca-cola" #"^coca" "free")
 ;; => free-cola
 
-(def strings ["_coca-lola" "-free" "-pepsi-cola" ])
+(def strings ["_coca-lola" "-free" "-pepsi-cola"])
 
 (defn fixed-string [str_]
-  (clojure.string/replace str_ #"^-" "_")
-  )
+  (clojure.string/replace str_ #"^-" "_"))
 
 (map fixed-string strings)
 ;; => ("_coca-lola" "_free" "_pepsi-cola")
 
 (defn fixed-string [str_]
-  {:name (clojure.string/replace str_ #"^-" "_")}
-  )
+  {:name (clojure.string/replace str_ #"^-" "_")})
 
 (map fixed-string strings)
 ;; => ({:name "_coca-lola"} {:name "_free"} {:name "_pepsi-cola"})
@@ -578,19 +574,18 @@ notas_list
 (reduce + 15 [1 1 1])
 ;; => 18
 
-(reduce - 1 [ 1 1 1 ]) ; = (- (- 1 1) 1)
+(reduce - 1 [1 1 1]) ; = (- (- 1 1) 1)
 ;; => -1
 
-(reduce - 1 [ 1 1 1 ]) ; = (- (- (- 1 1) 1) 1)
+(reduce - 1 [1 1 1]) ; = (- (- (- 1 1) 1) 1)
 ;; => -2
 
-(empty? [ 1 2 ])
+(empty? [1 2])
 ;; => false
 
 (defn mapset [f l]
   (let [l_ (set l)]
-    (map f l_))
-  )
+    (map f l_)))
 
 (mapset inc [2 3 2])
 ;; => (4 3)
@@ -600,3 +595,184 @@ notas_list
 
 (mapset #(* % 10) [2 3 2])
 ;; => (30 20)
+
+;; multiplica uma lista por 10;
+
+(map #(* % 10) [1,2,3])
+;; => (10 20 30)
+
+(defn simitrize [lista-completa]
+  (loop [restante lista-completa resultado-final []]
+    (if (empty? restante)
+      resultado-final
+      (let [[cabeca-restante & cauda-restante] restante]
+        (recur cauda-restante
+               (into resultado-final (set [cabeca-restante (...)])))))))
+
+;; loop-recur caminham juntos.
+
+(defn counter []
+  (loop [i 0 x 0]
+    (println i)
+    (println x)
+    (if (> i 2)
+      (println "saiu")
+      (recur (inc i) (- x 1)))))
+
+(counter)
+;; 0
+;; 0
+;; 1
+;; -1
+;; 2
+;; -2
+;; 3
+;; -3
+;; saiu
+;; => nil
+
+(defn counter []
+  (loop [i 0 x 0]
+    (println i)
+    (println x)
+    (if (> i 2)
+      (println "saiu")
+      (recur (inc i) (- x 1)))))
+; => #'noob.core/counter
+
+;; loop tem 'dois estados' , o recur precisa tbm, obviamente. 
+
+;; => input (1,2,3,4,5)
+;; => output ( { :n 2 :n2 4 :n3 8 })
+
+; (defn mult [listagem]
+;   (loop [n listagem table []]
+
+;     (println listagem)
+
+;     (if (empty? n)
+;       table
+;       (let [[first & rest] listagem]
+;        (recur rest (into table (set [first (identity {:n first , :n2 (* first first)})]))))
+;     ))
+;   )
+
+; (mult [2 4 5])
+
+(+ 2 1)
+
+(defn words-policy [word]
+  (clojure.string/lower-case word))
+
+(words-policy "I LoVe YoU!")
+; => "i love you!"
+
+(defn words-policy [word]
+  (re-matches #"hate you" (clojure.string/lower-case word)))
+; => #'noob.core/words-policy
+; 
+(words-policy "I love yOU")
+; => nil
+
+(words-policy "HatE You")
+; => "hate you"
+
+(defn words-policy [word]
+  (re-matches #"hate you(.*)" (clojure.string/lower-case word)))
+
+(words-policy "HatE You Soo Much")
+; => ["hate you soo much" " soo much"]
+
+(defn words-policy [word]
+  (re-matches #"(.*)hate you(.*)" (clojure.string/lower-case word)))
+
+(words-policy "I rEallY HatE You Soo Much")
+; => ["i really hate you soo much" "i really " " soo much"]
+
+(re-seq #"ss" "miseissseippssi")
+; => ("ss" "ss")
+
+(re-seq #"s+" "miseissseippssi")
+; => ("s" "sss" "ss")
+
+(def bad-terms ["hate you" "vasco da gama" "kill you"])
+; => #'noob.core/bad-terms
+
+(def sent ["lOVE u" "Cool" "dOnt Like yOu" "hatE you"])
+; => #'noob.core/sent
+
+(defn lower [x] (clojure.string/lower-case x))
+
+(map lower sent)
+; => ("i love you" "you are my heart" "dont like you" "kill you")
+
+(map words-policy bad-terms)
+; => (["hate you" "" ""] nil nil)
+
+(map words-policy sent)
+; => (nil nil nil ["hate you" "" ""])
+
+(#(* % 450) 2)
+; 900
+
+((fn [x] (* x 450)) 2)
+; 900
+
+(defn exp [x n]
+  (loop [result 1 n n]
+    (if (zero? n)
+      result
+      (recur (* x result) (dec n)))))
+
+(exp 3 4)
+
+(defn number?? [n] (instance? Number n))
+
+(number?? 3N)
+; => true
+
+(number?? "3")
+; => false
+
+(defn abs
+  "(abs n) is the absolute value of n" 
+  [n]
+  (if (number?? n)
+    (do (if (< n 0)
+          (* n -1)
+          n
+        )
+    )
+    "Not a number")
+)
+
+(abs 3)
+; => 3
+; 
+(abs -3)
+; => 3
+
+(abs -9)
+; => 9
+
+(abs "1")
+; => "Not a number"
+; 
+; //////////////
+; trigger error and macro
+
+(defn ever-throw [& any]
+  (throw (IllegalArgumentException "Ever return throw!!!")))
+
+
+(defmacro if-not [condition exp]
+  (list 'if condition nil exp))
+
+(if-not (> 12 2) "no")
+
+(defn if-nots [x y]
+  (if(< x y)
+   x
+    y) )
+
+(if-nots 9 5)
