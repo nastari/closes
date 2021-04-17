@@ -757,22 +757,6 @@ notas_list
 
 (abs "1")
 ; => "Not a number"
-; 
-; //////////////
-; trigger error and macro
 
-(defn ever-throw [& any]
-  (throw (IllegalArgumentException "Ever return throw!!!")))
-
-
-(defmacro if-not [condition exp]
-  (list 'if condition nil exp))
-
-(if-not (> 12 2) "no")
-
-(defn if-nots [x y]
-  (if(< x y)
-   x
-    y) )
-
-(if-nots 9 5)
+(next (next (next '(5 21241 22 1 -1122))))
+; => (1 -1122)
