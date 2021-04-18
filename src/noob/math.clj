@@ -11,12 +11,15 @@
     :else (* n -1)))
 
 
-(defn abs 
+(defn abs
   "(abs n) is the absolute value of n" [n]
   (cond
     (not (number?? n)) (throw (IllegalArgumentException. "abs requires a number"))
     (neg? n) (* n -1)
     :else n))
+
+
+
 
 
 (defn fat
@@ -30,5 +33,8 @@
         acc
         (recur (* acc n) (dec n))))))
 
-(fat 4)
+
+
+
+
 
