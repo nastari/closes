@@ -758,20 +758,16 @@ notas_list
 (next (next (next '(5 21241 22 1 -1122))))
 ; => (1 -1122)
 
-
 (do (if false (do (println "Calculando rand") (rand))))
 ;; => nil
 
-;; better constructor to handle one codition
-(when true (println "Calculando rand")
-      (rand))
+;; better constructor to handle with one condition
+(when true (println "Calculando rand")(rand))
 
 ;; use def to global bindings
 ;; use let to local bindings
 
 (def x 10)
-
-x
 
 (let [x 20] x)
 ;; => 20
@@ -784,17 +780,15 @@ x
 
 (defn square [x] (* x x)) ; == (def square (fn [x] (* x x)))
 
-
 (square 5)
 ;; => 25
-
 
 (defn meditate
   "Meditate function"
   ([s]
    (println (str "i dont know.... " s)))
   ([s calm]
-   (println "Ok... you give the calm position")
+   (println "Ok... you give your position")
    (if calm
      (println (clojure.string/capitalize s))
      (println (str (clojure.string/upper-case s) "!!!")))))
@@ -808,10 +802,10 @@ x
 (defn co2-estimate [year]
   (+ 382 (* 2 (- year 2006))))
 
-;; ganho de legibilidade para conceitos que tem algum sentido como -> year-diff
 (defn co2-estimate [year]
   (let [year-diff (- year 2006)]
     (+ 382 (* 2 year-diff))))
+;; ganho de legibilidade para conceitos que tem algum sentido como -> year-diff
 
 (co2-estimate 2050)
 ;; 470
@@ -829,7 +823,6 @@ x
 ;; Hi! ;println returns nil
 ;; => true
 
-;; and return the first falsey
 (and (println "I return nil, so i'm falsey value") 5)
 ;; I return nil, so i'm falsey value
 ;; => nil
@@ -857,12 +850,11 @@ x
 (<= 4 2)
 ;; => false
 
-;; not returns true if the return is falsey value
 (not (< 5 2))
 ;; => true
+;; ;; not returns true if the return is `falsey` value
 
-(defn biggerThanFive [x]
-  (not (<= x 5)))
+(defn biggerThanFive [x](not (<= x 5)))
 
 (biggerThanFive 12)
 
@@ -876,17 +868,14 @@ x
 ((fn [x]
    (if (or (<= 1 x 100) (= 0 (mod x 100)))
      (println "valid")
-     (println "not-valid"))) 151)
-
-;; the floating point are 'contagious' 
+     (println "not-valid"))) 151) 
 
 (/ 3 4)
 ;; 3/4
 
 (/ 3 4.0)
 ;; 0.75
-
-(int \a)
+;; ;; the floating point are 'contagious'
 
 (defn encode-letter
   [s x]
@@ -902,8 +891,51 @@ x
 
 {:sport "soccer", :team "flamengo"}
 
-(def favorite-fruit {:name "Kiwi", :color "Green", :kcal_per_100g 61 :distinguish_mark "Hairy"})
+(def favorite-fruit {:name "Kiwi", 42 "Green", :kcal_per_100g 61 :distinguish_mark "Hairy"})
 
 (get favorite-fruit :name)
-
+;; =
 (:name favorite-fruit)
+;; =
+(favorite-fruit :name)
+
+(favorite-fruit 42)
+
+;; keywords AND maps have the special ability to be used as functions
+;; when positioned in the "operator position" ( as the first item of the list)
+;; they are invoked as a function that can be used to look up a value in a map
+;; 
+;; `maps são a forma mais aproximada de um json em clojure`
+
+(def dados-transacao { :owner "Olga" :cpf "030" })
+
+(:bank dados-transacao (throw (IllegalArgumentException. "Bank not provided.")))
+;; Syntax error (IllegalArgumentException) compiling at (noob/src/noob/core.clj:3:1).
+;; Bank not provided.
+
+(assoc dados-transacao :bank "zyx")
+;; => {:owner "Olga", :cpf "030", :bank "zyx"}
+
+dados-transacao
+;; => { :owner "Olga" :cpf "030" }
+;; MAP IS IMMUTABLE!!!
+
+(assoc dados-transacao :owner "Jose")
+;; assoc replaces the existing value when a key already exists
+
+(assoc dados-transacao 23 12)
+;; => {:owner "Olga", :cpf "030", 23 12}
+
+(23 dados-transacao)
+;; RRRHHH. 23 is not a keyword, neither a map!
+
+(dados-transacao 23)
+;; => nil
+;; Nice try...
+
+((assoc dados-transacao 23 12) 23)
+;; => 12
+
+(assoc dados-transacao :meta {:supply "AZE-212" :country "US" :currency "USD"})
+;; => {:owner "Olga", :cpf "030", :meta {:supply "AZE-212", :country "US", :currency "USD"}}
+
