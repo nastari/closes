@@ -735,16 +735,13 @@ notas_list
 ; => false
 
 (defn abs
-  "(abs n) is the absolute value of n" 
+  "(abs n) is the absolute value of n"
   [n]
   (if (number?? n)
     (do (if (< n 0)
           (* n -1)
-          n
-        )
-    )
-    "Not a number")
-)
+          n))
+    "Not a number"))
 
 (abs 3)
 ; => 3
@@ -760,3 +757,153 @@ notas_list
 
 (next (next (next '(5 21241 22 1 -1122))))
 ; => (1 -1122)
+
+
+(do (if false (do (println "Calculando rand") (rand))))
+;; => nil
+
+;; better constructor to handle one codition
+(when true (println "Calculando rand")
+      (rand))
+
+;; use def to global bindings
+;; use let to local bindings
+
+(def x 10)
+
+x
+
+(let [x 20] x)
+;; => 20
+
+((fn [x] (* x x x)) 5)
+;; => 125
+
+(#(* % % %) 5)
+;; => 125
+
+(defn square [x] (* x x)) ; == (def square (fn [x] (* x x)))
+
+
+(square 5)
+;; => 25
+
+
+(defn meditate
+  "Meditate function"
+  ([s]
+   (println (str "i dont know.... " s)))
+  ([s calm]
+   (println "Ok... you give the calm position")
+   (if calm
+     (println (clojure.string/capitalize s))
+     (println (str (clojure.string/upper-case s) "!!!")))))
+
+(meditate "eu to calmo" false)
+
+(meditate "hey!")
+
+(doc meditate)
+
+(defn co2-estimate [year]
+  (+ 382 (* 2 (- year 2006))))
+
+;; ganho de legibilidade para conceitos que tem algum sentido como -> year-diff
+(defn co2-estimate [year]
+  (let [year-diff (- year 2006)]
+    (+ 382 (* 2 year-diff))))
+
+(co2-estimate 2050)
+;; 470
+
+(true? 4)
+;; =>
+
+(false? nil)
+;; => false
+
+(nil? false)
+;; => false
+
+(nil? (println "Hi!"))
+;; Hi! ;println returns nil
+;; => true
+
+;; and return the first falsey
+(and (println "I return nil, so i'm falsey value") 5)
+;; I return nil, so i'm falsey value
+;; => nil
+
+;; returns first falsey value
+(and 5 3 4 nil 4)
+;; => nil
+
+(and 5 3 451)
+;; => 451
+
+;; returns first truthy value
+(or 5 3 4 nil 4)
+;; => 5
+
+(or false nil)
+;; => nil
+
+(or nil false)
+;; => false
+
+(= "a" "a")
+;; => true
+
+(<= 4 2)
+;; => false
+
+;; not returns true if the return is falsey value
+(not (< 5 2))
+;; => true
+
+(defn biggerThanFive [x]
+  (not (<= x 5)))
+
+(biggerThanFive 12)
+
+(mod 0 10)
+
+((fn [x]
+   (if (or (and (>= x 1) (<= x 100)) (= 0 (mod x 100)))
+     (println "valid")
+     (println "not-valid"))) 151)
+
+((fn [x]
+   (if (or (<= 1 x 100) (= 0 (mod x 100)))
+     (println "valid")
+     (println "not-valid"))) 151)
+
+;; the floating point are 'contagious' 
+
+(/ 3 4)
+;; 3/4
+
+(/ 3 4.0)
+;; 0.75
+
+(int \a)
+
+(defn encode-letter
+  [s x]
+  (let [code (Math/pow (+ x (int (first (char-array s)))) 2)]
+    (str "#" (int code))))
+
+(defn encode
+  [s]
+  (let [number-of-words (count (clojure.string/split s #"s"))]
+    (clojure.string/replace s #"\w" (fn [s] (encode-letter s number-of-words)))))
+
+(encode "How aree youu?")
+
+{:sport "soccer", :team "flamengo"}
+
+(def favorite-fruit {:name "Kiwi", :color "Green", :kcal_per_100g 61 :distinguish_mark "Hairy"})
+
+(get favorite-fruit :name)
+
+(:name favorite-fruit)

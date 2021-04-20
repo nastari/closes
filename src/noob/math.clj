@@ -18,10 +18,6 @@
     (neg? n) (* n -1)
     :else n))
 
-
-
-
-
 (defn fat
   "Returns the factorial of n" [n]
   (cond
@@ -33,8 +29,16 @@
         acc
         (recur (* acc n) (dec n))))))
 
+(defn valid-email [e]
+  (if (> (count e) 10)
+    true
+    false))
+
+(defn create-user [{:keys [email password]}]
+  (cond
+    (false? (valid-email email)) (throw (IllegalArgumentException. "Bad"))
+    :else
+    {::a email :b password}))
 
 
-
-
-
+(create-user {:email "3213121@gmail.com" :password "3d3deaafas3"})
