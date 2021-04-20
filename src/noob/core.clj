@@ -939,3 +939,117 @@ dados-transacao
 (assoc dados-transacao :meta {:supply "AZE-212" :country "US" :currency "USD"})
 ;; => {:owner "Olga", :cpf "030", :meta {:supply "AZE-212", :country "US", :currency "USD"}}
 
+(dec ((assoc dados-transacao 23 12) 23))
+;; => 11
+
+(def transaction { :name "john" :amount 11 })
+;; => {:name "john", :amount 11}
+
+(assoc transaction :amount (- (:amount transaction) 1))
+;; => {:name "john", :amount 10}
+
+transaction
+;; => {:name "john", :amount 11}
+
+(update transaction :amount (fn [x] (* x 1000)))
+;; => {:name "john", :amount 11000}
+
+;; assoc, update does not change the immutable map; it returns a new map.
+
+(dissoc transaction :amount )
+;; => {:name "john"}
+
+;; Maps ok.
+;; next => Sets. Unique Values.
+
+;; #{ }
+
+#{1 2 4 5}
+;; => #{1 4 2 5}
+
+;; Notice in the preceding expression that when the set is evaluated, 
+;; it does not return the elements of the sets in the order that they 
+;; were defined in the literal expression. This is because of the internal
+;; structure of the HashSet. The value is transformed in a unique hash, 
+;; which allows fast access but does not keep the insertion order
+;; If you care about the order in which the elements are added, you 
+;; need to use a different data structure, for example, a sequence such as a 
+;; vector (which we will soon discover). Use a HashSet to represent elements
+;;  that logically belong together, for example, an enumeration of unique values.
+
+(hash-set 2 4 1 5)
+;; => #{1 4 2 5}
+
+(hash-set 2 4 2 5)
+;; => #{ 4 2 5} ; intersecção
+
+;; Possível também criar de outras coleções
+
+(set [:a :b :c ])
+;; => #{:c :b :a}
+
+(set [:a :b :C :a ])
+;; => #{:C :b :a} ; intersecção; 
+
+;; The set function will not throw an error when converting a collection of non-unique 
+;; values to a set with the set function, which can be useful for deduplicating values
+
+(sorted-set 19 15 2)
+;; => #{2 15 19}
+
+
+;; A Hash Set is a good choice of data structure for a
+;; list of currencies because we typically want
+;; to store a collection of unique values and 
+;; efficiently check for containment
+
+(def supported-currencies #{"Dollar" "Japanese yen" :real "Euro" "Indian rupee" "British pound"})
+
+(get supported-currencies "Dollar")
+;; => "Dollar"
+
+(supported-currencies "Dollar")
+;; => "Dollar"
+
+(:real supported-currencies)
+;; => :real
+
+(supported-currencies :real)
+;; => :real
+
+;; Semantically better
+
+(contains? supported-currencies "Dollar")
+;; true
+
+(contains? supported-currencies :real)
+;; true
+
+(contains? supported-currencies :dolar)
+;; false
+
+(def map-currency {:dolar 17/3 :real 1})
+
+map-currency
+;; => {:dolar 17/3, :real 1}
+
+(contains? map-currency :real)
+;; => true
+
+;; ok. contains? works with maps too.
+
+(def example-set #{ :a :b :c :d})
+
+(:a example-set)
+;; :a
+
+(def example-map {:a :b :c :d})
+
+(:a example-map)
+;; :b
+
+;; get funciona para maps; sets;
+;; keywords/sets tem habilidades especiais de procurar também, assim como,
+;; keywords/maps. A diferença é que maps procura um valor pela chave e o 
+;; sets procura a sí mesmo.
+
